@@ -14,36 +14,22 @@ The preprocessor takes a C source file as input and generates a .i file containi
 
 ### Processing Flow
 
----text
 C Source File
-      |
-      v
-+----------------------+
-| Read Source File     |
-+----------------------+
-      |
-      v
-+----------------------+
-| Remove Comments      |
-| // and /* ... */     |
-+----------------------+
-      |
-      v
-+----------------------+
-| Header Inclusion     |
-| #include             |
-+----------------------+
-      |
-      v
-+----------------------+
-| Macro Processing     |
-| #define              |
-+----------------------+
-      |
-      v
-+----------------------+
-| Generate .i File     |
-+----------------------+
+     |
+     v
+Read Source File
+     |
+     v
+Remove Comments
+     |
+     v
+Header Inclusion
+     |
+     v
+Macro Processing
+     |
+     v
+Generate .i File
 
 
 
@@ -80,14 +66,15 @@ Mini-C-Preprocessor/
 
 
 # Module Description
-File	Responsibility
-main.c	Program entry point, file handling and preprocessing workflow
-removeComments.c	Removes single-line and multi-line comments
-headerFile_Inclusion.c	Processes system and user-defined header inclusion
-replaceMacro.c	Performs macro expansion and replacement
-header.h	Shared declarations and required headers
-makefile	Build and cleanup automation
-README.md	Project documentation
+| File | Responsibility |
+|---|---|
+| `main.c` | Program entry point, file handling, and preprocessing workflow |
+| `removeComments.c` | Removes single-line and multi-line comments |
+| `headerFile_Inclusion.c` | Processes system and user-defined header inclusion |
+| `replaceMacro.c` | Performs macro expansion and replacement |
+| `header.h` | Shared declarations and required headers |
+| `makefile` | Build and cleanup automation |
+| `README.md` | Project documentation |
 
 
 # Requirements
@@ -126,10 +113,9 @@ cat test.i
 
 # Example
 Input
+
 #include <stdio.h>
-
 #define VALUE 100
-
 int main()
 {
     // Single-line comment
@@ -145,6 +131,7 @@ int main()
 
 # Output
 After preprocessing, the relevant source becomes:
+
 int main()
 {
     printf("%d\n", 100);
@@ -203,13 +190,15 @@ The project was tested for:
 - Missing input-file handling
 - Clean compilation with -Wall -Wextra
 - Memory safety using AddressSanitizer
+
 AddressSanitizer
 Memory debugging was performed using:
-gcc -Wall -Wextra -g \
--fsanitize=address \
--fno-omit-frame-pointer \
-main.c headerFile_Inclusion.c removeComments.c replaceMacro.c \
--o my_preprocessor_asan
+
+gcc -Wall -Wextra -g -fsanitize=address \
+    -fno-omit-frame-pointer \
+    main.c headerFile_Inclusion.c removeComments.c replaceMacro.c \
+    -o my_preprocessor_asan
+
 The comment-removal and macro-expansion test cases completed without AddressSanitizer errors.
 
 
