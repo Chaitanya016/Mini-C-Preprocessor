@@ -128,6 +128,8 @@ int main()
 
 ## Author
 
-Surya A
+Chaitanya Sai Parimi
 
-Interested in Embedded Systems and Systems Programming.
+ECE Graduate | Embedded Systems & Systems Programming
+
+This repository contains my modified and improved version of the original Mini C Preprocessor project.
