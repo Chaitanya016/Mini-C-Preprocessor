@@ -12,8 +12,10 @@ The project implements a simplified version of some operations performed by the 
 
 The preprocessor takes a C source file as input and generates a .i file containing the transformed source.
 
-### Processing Flow
 
+## Processing Flow
+
+```text
 C Source File
      |
      v
@@ -30,7 +32,7 @@ Macro Processing
      |
      v
 Generate .i File
-
+```
 
 
 ## Features
@@ -52,9 +54,11 @@ Generate .i File
 - macOS-compatible system header handling
 
 
-# Project Structure
+
+## Project Structure
+
+```text
 Mini-C-Preprocessor/
-│
 ├── main.c
 ├── header.h
 ├── headerFile_Inclusion.c
@@ -63,6 +67,7 @@ Mini-C-Preprocessor/
 ├── makefile
 ├── README.md
 └── .gitignore
+```
 
 
 # Module Description
@@ -84,24 +89,57 @@ Mini-C-Preprocessor/
 - Standard C development environment
 The current implementation includes macOS SDK header handling for system includes.
 
-# Build
+## Build
+
 Clone the repository:
+
+```bash
 git clone https://github.com/Chaitanya016/Mini-C-Preprocessor.git
 cd Mini-C-Preprocessor
+```
 
 Build the project:
+
+```bash
 make
+```
 
 This generates:
+
+```text
 my_preprocessor
+```
 
 To clean the generated build files:
+
+```bash
 make clean
+```
+## Usage
 
-# Usage
 Run the preprocessor by passing a C source file:
-./my_preprocessor input.c
 
+```bash
+./my_preprocessor input.c
+```
+
+### Example
+
+```bash
+./my_preprocessor test.c
+```
+
+The program generates a preprocessed output file:
+
+```text
+test.i
+```
+
+You can inspect the output using:
+
+```bash
+cat test.i
+```
 # Example:
 ./my_preprocessor test.c
 
@@ -111,11 +149,13 @@ test.i
 You can inspect the output using:
 cat test.i
 
-# Example
-Input
+### Input
 
+```c
 #include <stdio.h>
+
 #define VALUE 100
+
 int main()
 {
     // Single-line comment
@@ -128,58 +168,62 @@ int main()
 
     return 0;
 }
+```
 
-# Output
+### Output
+
 After preprocessing, the relevant source becomes:
 
+```c
 int main()
 {
     printf("%d\n", 100);
 
     return 0;
 }
+```
+System header contents may also appear in the generated `.i` file because the implementation performs header inclusion.
 
-System header contents may also appear in the generated .i file because the implementation performs header inclusion.
 
 
-# Improvements Made
+
+## Improvements Made
+
 This repository started from an existing Mini C Preprocessor implementation. The following improvements were made during development.
-Standardized main()
-Changed the non-standard:
-void main()
 
-to:
-int main()
+- **Standardized `main()`**
+  - Changed the non-standard `void main()` to `int main()`.
+  - Added appropriate return codes.
 
-and added appropriate return codes.
-Improved Input File Handling
-Changed input-file opening from append mode to read mode:
-fopen(argv[1], "r");
+- **Improved Input File Handling**
+  - Changed input-file opening from append mode to read mode:
+    ```c
+    fopen(argv[1], "r");
+    ```
+  - Prevents a missing input file from being unintentionally created.
 
-This prevents a missing input file from being unintentionally created.
-Improved Output File Handling
-The output .i file is now created only after successful input-file validation.
-Corrected fgetc() and EOF Handling
-Changed character variables used with fgetc() from char to int so that EOF can be handled correctly.
-Improved Makefile
-The build system now uses:
--Wall
--Wextra
--g
+- **Improved Output File Handling**
+  - The `.i` file is now created only after successful input-file validation.
 
-and includes object-file dependencies and a clean target.
-Fixed Compiler Warnings
-Compiler warnings involving unused variables, uninitialized variables, and type mismatches were investigated and resolved.
-The project now builds without compiler warnings.
-Fixed Memory Management
-AddressSanitizer was used to identify a double-free involving memory shared between main() and the macro replacement module.
-The duplicate memory deallocation was removed after tracing the ownership of the allocated buffer.
-Improved Portability
-The original implementation used:
-/usr/include/
+- **Corrected `fgetc()` and EOF Handling**
+  - Changed character variables used with `fgetc()` from `char` to `int` so that `EOF` can be handled correctly.
 
-for system headers.
-The header inclusion logic was adapted for the macOS SDK environment.
+- **Improved Makefile**
+  - Added `-Wall -Wextra -g`.
+  - Added object-file dependencies.
+  - Added a `clean` target.
+
+- **Fixed Compiler Warnings**
+  - Investigated and resolved warnings involving unused variables, uninitialized variables, and type mismatches.
+  - The project now builds without compiler warnings.
+
+- **Fixed Memory Management**
+  - Used AddressSanitizer to identify a double-free involving memory shared between `main()` and the macro replacement module.
+  - Removed the duplicate deallocation after tracing ownership of the allocated buffer.
+
+- **Improved Portability**
+  - The original implementation used `/usr/include/` for system headers.
+  - The header inclusion logic was adapted for the macOS SDK environment.
 
 # Testing
 The project was tested for:
@@ -191,13 +235,16 @@ The project was tested for:
 - Clean compilation with -Wall -Wextra
 - Memory safety using AddressSanitizer
 
-AddressSanitizer
+### AddressSanitizer
+
 Memory debugging was performed using:
 
+```bash
 gcc -Wall -Wextra -g -fsanitize=address \
     -fno-omit-frame-pointer \
     main.c headerFile_Inclusion.c removeComments.c replaceMacro.c \
     -o my_preprocessor_asan
+```
 
 The comment-removal and macro-expansion test cases completed without AddressSanitizer errors.
 
