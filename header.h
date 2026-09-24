@@ -9,7 +9,7 @@
 void headerInclusion(FILE *,char *,int);
 void UserDefinedHeader(FILE *, char *, int);
 void removeComments(char *);
-void replaceMacro(char **,char **,char *, char *, int *);
+void replaceMacro(char **, char **, char *, char *, int *);
 char * replaceArguments(char *, char * , char *);
 
 typedef struct st

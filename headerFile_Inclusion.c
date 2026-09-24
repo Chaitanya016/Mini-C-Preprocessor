@@ -3,10 +3,11 @@
 void headerInclusion(FILE * Main,char *file,int size)  // Header file Inclusion
 {
 	char *s = malloc(size + 1);
-	char path[30] = "/usr/include/";  // path
+	char path[100] = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/";
 	char h[30];
 	int i = 0,j = 0,len,k = 0;
-	char ch,f = 0;
+	int ch;
+	char f = 0;
 
 	FILE *temp = fopen(file,"r");
 
@@ -50,8 +51,8 @@ void headerInclusion(FILE * Main,char *file,int size)  // Header file Inclusion
 				printf("%s header file is not present\n",path);
 				continue;
 			}
-			while((ch = fgetc(fp)) != EOF)  // including predefined header inclusion
-				fputc(ch,Main);
+			while((ch = fgetc(fp)) != EOF)
+			fputc(ch, Main);
 			fclose(fp);
 			continue;
 		}
@@ -92,10 +93,11 @@ void UserDefinedHeader(FILE * Main, char *file, int size)
 {
 	//printf("USER DEFined eXexuted\n");
 	char *s = malloc(size + 1);
-	char path[30] = "/usr/include/";  // path
+	char path[100] = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/";
 	char h[30];
 	int i = 0,j = 0,len,k = 0;
-	char ch,f = 0;
+	int ch;
+	char f = 0;
 
 	FILE *temp = fopen(file,"r");
 

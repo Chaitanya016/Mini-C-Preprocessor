@@ -2,7 +2,7 @@
 
 void removeComments(char *s)   // removing comments 
 {
-	int i,j,k,f = 0;
+	int i = 0;
 
 	for(i = 0 ; s[i] ;i++)
 	{
@@ -16,7 +16,6 @@ void removeComments(char *s)   // removing comments
 			}
 			if(s[i+1] == '*')
 			{
-				f = 1;
 				while(s[i])   // removing multi line comment
 				{
 					if(s[i] == '*')

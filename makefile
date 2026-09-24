@@ -1,19 +1,24 @@
-OBJS = main.o headerFile_Inclusion.o removeComments.o replaceMacro.o 
+	CC = gcc
+CFLAGS = -Wall -Wextra -g
 
-target = my_preprocessor 
+TARGET = my_preprocessor
 
-cc = gcc     
+OBJS = main.o headerFile_Inclusion.o removeComments.o replaceMacro.o
 
-exe : ${OBJS}
-	$(cc) $(OBJS) -o my_preprocessor
-main.o : main.c
-	$(cc) -c $^
-headerFile_Inclusion.o : headerFile_Inclusion.c
-	$(cc) -c $^
-removeComments.o : removeComments.c
-	$(cc) -c $^
-replaceMacro.o : replaceMacro.c
-	$(cc) -c $^
-clear:
-	@echo "clearing please wait..."
-	@rm -rv *.o 
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+
+main.o: main.c header.h
+	$(CC) $(CFLAGS) -c main.c
+
+headerFile_Inclusion.o: headerFile_Inclusion.c header.h
+	$(CC) $(CFLAGS) -c headerFile_Inclusion.c
+
+removeComments.o: removeComments.c header.h
+	$(CC) $(CFLAGS) -c removeComments.c
+
+replaceMacro.o: replaceMacro.c header.h
+	$(CC) $(CFLAGS) -c replaceMacro.c
+
+clean:
+	rm -f $(OBJS) $(TARGET)

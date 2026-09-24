@@ -8,7 +8,7 @@ void replaceMacro(char **data,char **s,char *name, char *body ,int * size)
 	  printf("MacroName : %s\n",name);
 	  printf("MacroBody : %s\n",body);*/
 
-	int op = 0,m;
+	int op = 0, m = 0;
 	*s = realloc(*s , *size + 1);
 
 	if(strchr(name,'('))
