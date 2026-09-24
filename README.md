@@ -1,135 +1,243 @@
-# Mini C Preprocessor in C
+# Mini C Preprocessor
+
+A modular C-based preprocessor that performs basic source-code preprocessing operations such as comment removal, header-file inclusion, and macro expansion.
+
+This repository is a modified and improved version of an existing Mini C Preprocessor implementation. The improvements focus on reliability, memory safety, build quality, portability, and testing.
+
+---
 
 ## Overview
-This project implements a simplified version of the C preprocessor. It simulates some of the operations performed by the C compiler during the preprocessing stage before actual compilation.
 
-The project is developed entirely in C using file handling, string manipulation, and modular programming techniques.
+The project implements a simplified version of some operations performed by the C preprocessor before compilation.
 
----
+The preprocessor takes a C source file as input and generates a .i file containing the transformed source.
+
+### Processing Flow
+
+---text
+C Source File
+      |
+      v
++----------------------+
+| Read Source File     |
++----------------------+
+      |
+      v
++----------------------+
+| Remove Comments      |
+| // and /* ... */     |
++----------------------+
+      |
+      v
++----------------------+
+| Header Inclusion     |
+| #include             |
++----------------------+
+      |
+      v
++----------------------+
+| Macro Processing     |
+| #define              |
++----------------------+
+      |
+      v
++----------------------+
+| Generate .i File     |
++----------------------+
+
+
 
 ## Features
+- Single-line comment removal using //
+- Multi-line comment removal using /* ... */
+- System header inclusion using #include <...>
+- User-defined header inclusion
+- Nested header inclusion
+- Object-like macro expansion
+- Function-like macro processing
+- Generation of preprocessed .i output
+- Modular C implementation
+- Makefile-based build system
+- Compiler warnings enabled with -Wall -Wextra
+- Debug build support with -g
+- AddressSanitizer-based memory debugging
+- Improved input-file and error handling
+- Improved memory management
+- macOS-compatible system header handling
 
-- Macro substitution using `#define`
-- Function-like macro substitution
-- Header file inclusion using `#include`
-- Nested header file inclusion
-- Comment removal
-- Source code transformation before compilation
-- Multi-file project structure
-- Makefile support
 
----
-
-## Technologies Used
-
-- C Programming
-- File Handling
-- String Manipulation
-- Dynamic Memory Management
-- Multi-file Programming
-- Makefile
-- Git & GitHub
-
----
-
-## Project Structure
-
-```
-mini-c-preprocessor/
+# Project Structure
+Mini-C-Preprocessor/
 │
-├── src/
-├── include/
-├── input/
-├── output/
-├── Makefile
+├── main.c
+├── header.h
+├── headerFile_Inclusion.c
+├── removeComments.c
+├── replaceMacro.c
+├── makefile
 ├── README.md
 └── .gitignore
-```
 
----
 
-## How to Build
+# Module Description
+File	Responsibility
+main.c	Program entry point, file handling and preprocessing workflow
+removeComments.c	Removes single-line and multi-line comments
+headerFile_Inclusion.c	Processes system and user-defined header inclusion
+replaceMacro.c	Performs macro expansion and replacement
+header.h	Shared declarations and required headers
+makefile	Build and cleanup automation
+README.md	Project documentation
 
-```bash
+
+# Requirements
+- GCC or Clang
+- Make
+- macOS
+- Standard C development environment
+The current implementation includes macOS SDK header handling for system includes.
+
+# Build
+Clone the repository:
+git clone https://github.com/Chaitanya016/Mini-C-Preprocessor.git
+cd Mini-C-Preprocessor
+
+Build the project:
 make
-```
 
----
+This generates:
+my_preprocessor
 
-## How to Run
+To clean the generated build files:
+make clean
 
-```bash
-./exe input.c
-```
+# Usage
+Run the preprocessor by passing a C source file:
+./my_preprocessor input.c
 
-or
+# Example:
+./my_preprocessor test.c
 
-```bash
-./a.out input.c
-```
+The program generates a preprocessed output file:
+test.i
 
-(depending on your executable name)
+You can inspect the output using:
+cat test.i
 
----
+# Example
+Input
+#include <stdio.h>
 
-## Supported Preprocessor Directives
-
-| Directive | Supported |
-|-----------|------------|
-| #define | Yes |
-| Macro with Arguments | Yes |
-| #include | Yes |
-| Nested Header Files | Yes |
-| Comment Removal | Yes |
-
----
-
-## Example
-
-### Input
-
-```c
-#define PI 3.14
-#define SQR(x) ((x)*(x))
-
-#include "header.h"
-
-// sample comment
+#define VALUE 100
 
 int main()
 {
-    printf("%f", PI);
-    printf("%d", SQR(5));
+    // Single-line comment
+
+    /*
+       Multi-line comment
+    */
+
+    printf("%d\n", VALUE);
+
+    return 0;
 }
-```
 
-### Output
-
-```c
+# Output
+After preprocessing, the relevant source becomes:
 int main()
 {
-    printf("%f", 3.14);
-    printf("%d", ((5)*(5)));
+    printf("%d\n", 100);
+
+    return 0;
 }
-```
 
----
+System header contents may also appear in the generated .i file because the implementation performs header inclusion.
 
-## Learning Outcomes
 
-- Understanding the C compilation process
-- Working with preprocessor directives
-- File parsing and transformation
-- Macro expansion techniques
-- Modular programming and Makefiles
-- Git and GitHub workflow
+# Improvements Made
+This repository started from an existing Mini C Preprocessor implementation. The following improvements were made during development.
+Standardized main()
+Changed the non-standard:
+void main()
 
----
+to:
+int main()
 
-## Author
+and added appropriate return codes.
+Improved Input File Handling
+Changed input-file opening from append mode to read mode:
+fopen(argv[1], "r");
 
+This prevents a missing input file from being unintentionally created.
+Improved Output File Handling
+The output .i file is now created only after successful input-file validation.
+Corrected fgetc() and EOF Handling
+Changed character variables used with fgetc() from char to int so that EOF can be handled correctly.
+Improved Makefile
+The build system now uses:
+-Wall
+-Wextra
+-g
+
+and includes object-file dependencies and a clean target.
+Fixed Compiler Warnings
+Compiler warnings involving unused variables, uninitialized variables, and type mismatches were investigated and resolved.
+The project now builds without compiler warnings.
+Fixed Memory Management
+AddressSanitizer was used to identify a double-free involving memory shared between main() and the macro replacement module.
+The duplicate memory deallocation was removed after tracing the ownership of the allocated buffer.
+Improved Portability
+The original implementation used:
+/usr/include/
+
+for system headers.
+The header inclusion logic was adapted for the macOS SDK environment.
+
+# Testing
+The project was tested for:
+- Single-line comment removal
+- Multi-line comment removal
+- Macro replacement
+- System header inclusion
+- Missing input-file handling
+- Clean compilation with -Wall -Wextra
+- Memory safety using AddressSanitizer
+AddressSanitizer
+Memory debugging was performed using:
+gcc -Wall -Wextra -g \
+-fsanitize=address \
+-fno-omit-frame-pointer \
+main.c headerFile_Inclusion.c removeComments.c replaceMacro.c \
+-o my_preprocessor_asan
+The comment-removal and macro-expansion test cases completed without AddressSanitizer errors.
+
+
+# Technologies Used
+- C
+- GCC / Clang
+- Make
+- File I/O
+- Dynamic memory allocation
+- String processing
+- C preprocessor concepts
+- AddressSanitizer
+- Git
+- GitHub
+
+
+# Future Improvements
+- Make system-header paths configurable
+- Add support for #ifdef, #ifndef, #if, and #endif
+- Improve function-like macro parsing
+- Add automated test cases
+- Add GitHub Actions CI
+- Improve error reporting
+- Support configurable include directories
+- Improve Linux/macOS portability
+
+
+# Author
 Chaitanya Sai Parimi
-
 ECE Graduate | Embedded Systems & Systems Programming
-
-This repository contains my modified and improved version of the original Mini C Preprocessor project.
+This repository is a modified and improved version of an existing Mini C Preprocessor implementation.
